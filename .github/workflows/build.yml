@@ -1,70 +1,41 @@
-# .github/workflows/build.yml
-# ضعه في مستودع GitHub الخاص بك
-# سيقوم بالبناء الحقيقي للـ APK على GitHub Servers مجاناً
-
-name: Android Build
+name: Android CI
 
 on:
-  workflow_dispatch:
-    inputs:
-      project_zip:
-        description: 'Base64 encoded project zip'
-        required: false
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
     steps:
-      # ── 1. Setup ────────────────────────────────────────────────────────
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v3
 
-      # ── 2. If project was uploaded via API ─────────────────────────────
-      - name: Extract uploaded project
-        if: ${{ github.event.inputs.project_zip != '' }}
+      - name: Download gradle-wrapper.jar
         run: |
-          echo "${{ github.event.inputs.project_zip }}" | base64 -d > project.zip
-          unzip -o project.zip -d .
-          ls -la
+          mkdir -p gradle/wrapper
+          curl -fsSL "https://github.com/gradle/gradle/raw/v8.9.0/gradle/wrapper/gradle-wrapper.jar" \
+            -o gradle/wrapper/gradle-wrapper.jar
 
-      # ── 3. Grant execute permission ────────────────────────────────────
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      # ── 4. Build Debug APK ─────────────────────────────────────────────
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+      - name: Build APK
+        run: |
+          chmod +x gradlew
+          yes | sdkmanager --licenses || true
+          ./gradlew assembleDebug --no-daemon \
+            -Dorg.gradle.jvmargs="-Xmx3072m"
         env:
-          GRADLE_OPTS: "-Xmx4096m -Dfile.encoding=UTF-8"
+          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
 
-      # ── 5. Upload APK as artifact ──────────────────────────────────────
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/*.apk
           retention-days: 7
-
-      # ── 6. Output APK URL (for direct download) ────────────────────────
-      - name: Output build info
-        run: |
-          APK=$(ls app/build/outputs/apk/debug/*.apk | head -1)
-          echo "APK_PATH=$APK" >> $GITHUB_OUTPUT
-          echo "APK_SIZE=$(du -sh $APK | cut -f1)" >> $GITHUB_OUTPUT
-          echo "BUILD_TIME=$(date)" >> $GITHUB_OUTPUT
-          echo "✓ Build successful: $APK"
-          echo "✓ Size: $(du -sh $APK | cut -f1)"
