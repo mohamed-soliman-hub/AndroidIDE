@@ -1,0 +1,19 @@
+<resources>
+    <style name="Theme.AndroidIDE" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">#82AAFF</item>
+        <item name="colorOnPrimary">#0D1117</item>
+        <item name="colorSecondary">#C3E88D</item>
+        <item name="colorBackground">#0D1117</item>
+        <item name="colorSurface">#161B22</item>
+        <item name="android:colorBackground">#0D1117</item>
+        <item name="android:windowBackground">#0D1117</item>
+        <item name="android:statusBarColor">#0D1117</item>
+        <item name="android:navigationBarColor">#0D1117</item>
+    </style>
+
+    <style name="Theme.AndroidIDE.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#0D1117</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="postSplashScreenTheme">@style/Theme.AndroidIDE</item>
+    </style>
+</resources>

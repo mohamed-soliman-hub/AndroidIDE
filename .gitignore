@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+build/
+/local.properties
+*.jks
+*.keystore
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Generated
+/captures
+.externalNativeBuild/
+.cxx/
+
+# Kotlin
+*.class
