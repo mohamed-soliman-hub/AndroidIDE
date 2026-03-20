@@ -1,5 +1,5 @@
 <resources>
-    <style name="Theme.AndroidIDE" parent="Theme.Material3.DarkNight.NoActionBar">
+    <style name="Theme.AndroidIDE" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#82AAFF</item>
         <item name="colorOnPrimary">#0D1117</item>
         <item name="colorSecondary">#C3E88D</item>
