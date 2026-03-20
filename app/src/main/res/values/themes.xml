@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.AndroidIDE" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#82AAFF</item>
         <item name="colorOnPrimary">#0D1117</item>
         <item name="colorSecondary">#C3E88D</item>
-        <item name="colorBackground">#0D1117</item>
         <item name="colorSurface">#161B22</item>
         <item name="android:colorBackground">#0D1117</item>
         <item name="android:windowBackground">#0D1117</item>
@@ -16,4 +17,5 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.AndroidIDE</item>
     </style>
+
 </resources>
